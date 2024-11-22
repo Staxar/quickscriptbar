@@ -6,6 +6,7 @@ interface PackageJson {
   scripts: { [key: string]: string };
 }
 
+// Activation function
 export function activate(context: vscode.ExtensionContext) {
   const configureScriptsCommand = vscode.commands.registerCommand(
     "quickscriptbar.configureScripts",
@@ -18,6 +19,42 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(configureScriptsCommand, runScriptCommand);
+}
+
+// Main function to configure scripts
+async function configureScripts(context: vscode.ExtensionContext) {
+  try {
+    const workspaceFolder = getWorkspaceFolder();
+    const packageJson = await readPackageJson(workspaceFolder);
+    const preSelectedScripts = getPreSelectedScripts(context);
+
+    if (preSelectedScripts.length) {
+      updateStatusBar(preSelectedScripts, packageJson.scripts, context);
+    }
+
+    const selectedScripts = await selectScriptsFromPackageJson(
+      packageJson.scripts,
+      preSelectedScripts
+    );
+    if (!selectedScripts) {
+      return;
+    }
+
+    saveScripts(context, selectedScripts);
+    updateStatusBar(selectedScripts, packageJson.scripts, context);
+  } catch (error) {
+    console.error("Error in configureScripts:", error);
+  }
+}
+
+// Helper functions
+function getWorkspaceFolder(): string {
+  const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+  if (!workspaceFolder) {
+    vscode.window.showErrorMessage("No workspace folder found!");
+    throw new Error("No workspace folder found!");
+  }
+  return workspaceFolder;
 }
 
 async function readPackageJson(workspaceFolder: string): Promise<PackageJson> {
@@ -36,14 +73,16 @@ async function readPackageJson(workspaceFolder: string): Promise<PackageJson> {
   return packageJson;
 }
 
-function getWorkspaceFolder(): string {
-  const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-  if (!workspaceFolder) {
-    vscode.window.showErrorMessage("No workspace folder found!");
-    throw new Error("No workspace folder found!");
-  }
+function getPreSelectedScripts(context: vscode.ExtensionContext): string[] {
+  return context.workspaceState.get("savedScripts", []);
+}
 
-  return workspaceFolder;
+async function selectScriptsFromPackageJson(
+  scripts: { [key: string]: string },
+  preSelectedScripts: string[]
+): Promise<string[] | undefined> {
+  const scriptNames = Object.keys(scripts);
+  return await selectScripts(scriptNames, preSelectedScripts);
 }
 
 async function selectScripts(
@@ -69,6 +108,26 @@ async function selectScripts(
       quickPick.dispose();
     });
     quickPick.show();
+  });
+}
+
+function saveScripts(
+  context: vscode.ExtensionContext,
+  selectedScripts: string[]
+) {
+  context.workspaceState.update("savedScripts", selectedScripts);
+}
+
+function updateStatusBar(
+  selectedScripts: string[],
+  allScripts: { [key: string]: string },
+  context: vscode.ExtensionContext
+) {
+  clearStatusBarItems(context);
+  selectedScripts.forEach((scriptName) => {
+    const scriptCommand = allScripts[scriptName];
+    const statusBarItem = createStatusBarItem(scriptName, scriptCommand);
+    context.subscriptions.push(statusBarItem);
   });
 }
 
@@ -101,60 +160,10 @@ function createStatusBarItem(
   return statusBarItem;
 }
 
-function updateStatusBar(
-  selectedScripts: string[],
-  allScripts: { [key: string]: string },
-  context: vscode.ExtensionContext
-) {
-  clearStatusBarItems(context);
-  selectedScripts.forEach((script) => {
-    const scriptCommand = allScripts[script];
-    const statusBarItem = createStatusBarItem(script, scriptCommand);
-    context.subscriptions.push(statusBarItem);
-  });
-}
-
 function runScript(script: string) {
   const terminal = vscode.window.createTerminal({
     name: `Run Script: ${script}`,
   });
   terminal.sendText(`npm run ${script}`);
   terminal.show();
-}
-
-function saveScripts(
-  context: vscode.ExtensionContext,
-  selectedScripts: string[]
-) {
-  context.workspaceState.update("savedScripts", selectedScripts);
-}
-
-async function configureScripts(context: vscode.ExtensionContext) {
-  try {
-    const workspaceFolder = getWorkspaceFolder();
-    const preSelectedScripts = context.workspaceState.get<string[]>(
-      "savedScripts",
-      []
-    );
-
-    const packageJson = await readPackageJson(workspaceFolder);
-
-    if (preSelectedScripts.length) {
-      updateStatusBar(preSelectedScripts, packageJson.scripts, context);
-    }
-
-    const scriptNames = Object.keys(packageJson.scripts);
-    const selectedScripts = await selectScripts(
-      scriptNames,
-      preSelectedScripts
-    );
-    if (!selectedScripts) {
-      return;
-    }
-
-    saveScripts(context, selectedScripts);
-    updateStatusBar(selectedScripts, packageJson.scripts, context);
-  } catch (error) {
-    console.error("Error in configureScripts:", error);
-  }
 }
