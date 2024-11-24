@@ -47,7 +47,8 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ## Buy me a coffee
 
-<img src="https://raw.githubusercontent.com/Staxar/packagefinder/master/images/bmc_qr.png" alt="buymeacoffe" width="250" height="250">
+<a href="https://buymeacoffee.com/staxar" target="_blank">
+    <img src="images/bmc_qr.png" alt="Buy me a coffee">
+</a>
 
 **Enjoy!**
-https://buymeacoffee.com/staxar
