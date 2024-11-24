@@ -1,71 +1,53 @@
 # quickscriptbar README
 
-This is the README for your extension "quickscriptbar". After writing up a brief description, we recommend including the following sections.
+Quick Script Bar is a Visual Studio Code extension that allows you to quickly select and add scripts to your status bar for easy access and execution.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Multi-Select Quick Pick: Select multiple scripts from a list using a convenient Quick Pick interface.
 
-For example if there is an image subfolder under your extension project workspace:
+### Pre-Selected Scripts: Automatically pre-select scripts that you frequently use.
 
-\!\[feature X\]\(images/feature-x.png\)
+### Status Bar Integration: Add selected scripts to the status bar for quick execution.
+
+![Features](images/quickScriptBar.gif)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-## Requirements
+## Usage
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+1. Open a workspace in VSCode that contains package.json.
+2. Press `Ctrl+Shift+J` or run the command **Quick Script Bar: Configure Script in Status Bar** from the command palette (`Ctrl+Shift+P`).
+3. Select at least one script to save.
+4. Script appear on left side of status bar.
+5. Choose script and click to run in terminal.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- `quickscriptbar.configureScripts`: Select scripts from your package.json file and add them to status bar.
+- `quickscriptbar.runScript`: Run selected script in new terminal.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Initial release of Quick Script Bar
 
 ---
 
-## Following extension guidelines
+## Contributions
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+Contributions are welcome! If you encounter any bugs or have ideas for new features, feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/Staxar/quickscriptbar).
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+## License
 
-## Working with Markdown
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## Buy me a coffee
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+<img src="https://raw.githubusercontent.com/Staxar/packagefinder/master/images/bmc_qr.png" alt="buymeacoffe" width="250" height="250">
 
 **Enjoy!**
+https://buymeacoffee.com/staxar
