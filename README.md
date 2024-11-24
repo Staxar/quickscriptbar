@@ -4,15 +4,13 @@ Quick Script Bar is a Visual Studio Code extension that allows you to quickly se
 
 ## Features
 
-### Multi-Select Quick Pick: Select multiple scripts from a list using a convenient Quick Pick interface.
+> Multi-Select Quick Pick: Select multiple scripts from a list using a convenient Quick Pick interface.
 
-### Pre-Selected Scripts: Automatically pre-select scripts that you frequently use.
+> Pre-Selected Scripts: Automatically pre-select scripts that you frequently use.
 
-### Status Bar Integration: Add selected scripts to the status bar for quick execution.
+> Status Bar Integration: Add selected scripts to the status bar for quick execution.
 
 ![Features](images/quickScriptBar.gif)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
 ## Usage
 
