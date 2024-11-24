@@ -3,10 +3,14 @@
   "displayName": "Quick Script Bar",
   "description": "Instantly run your scripts from the VSCode status bar for faster development.",
   "version": "0.0.1",
-  "icon": "images/icon.webp",
+  "icon": "images/icon.png",
+  "pricing": "Free",
+  "sponsor": {
+    "url": "https://buymeacoffee.com/staxar"
+  },
   "publisher": "Marcin Domagała",
   "engines": {
-    "vscode": ">=1.6.0"
+    "vscode": "^1.6.0"
   },
   "categories": [
     "Other"
