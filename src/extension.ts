@@ -2,9 +2,7 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 
-interface PackageJson {
-  scripts: { [key: string]: string };
-}
+type ScriptsType = { [key: string]: string };
 
 // Activation function
 export function activate(context: vscode.ExtensionContext) {
@@ -25,15 +23,15 @@ export function activate(context: vscode.ExtensionContext) {
 async function configureScripts(context: vscode.ExtensionContext) {
   try {
     const workspaceFolder = getWorkspaceFolder();
-    const packageJson = await readPackageJson(workspaceFolder);
+    const packageJsonScripts = await readPackageJson(workspaceFolder);
     const preSelectedScripts = getPreSelectedScripts(context);
 
     if (preSelectedScripts.length) {
-      updateStatusBar(preSelectedScripts, packageJson.scripts, context);
+      updateStatusBar(preSelectedScripts, packageJsonScripts, context);
     }
 
     const selectedScripts = await selectScriptsFromPackageJson(
-      packageJson.scripts,
+      packageJsonScripts,
       preSelectedScripts
     );
     if (!selectedScripts) {
@@ -41,7 +39,7 @@ async function configureScripts(context: vscode.ExtensionContext) {
     }
 
     saveScripts(context, selectedScripts);
-    updateStatusBar(selectedScripts, packageJson.scripts, context);
+    updateStatusBar(selectedScripts, packageJsonScripts, context);
   } catch (error) {
     console.error("Error in configureScripts:", error);
   }
@@ -57,7 +55,7 @@ function getWorkspaceFolder(): string {
   return workspaceFolder;
 }
 
-async function readPackageJson(workspaceFolder: string): Promise<PackageJson> {
+async function readPackageJson(workspaceFolder: string): Promise<ScriptsType> {
   const packageJsonPath = path.join(workspaceFolder, "package.json");
   if (!fs.existsSync(packageJsonPath)) {
     vscode.window.showErrorMessage("No package.json found in the workspace!");
@@ -70,7 +68,7 @@ async function readPackageJson(workspaceFolder: string): Promise<PackageJson> {
     throw new Error("No scripts found in package.json!");
   }
 
-  return packageJson;
+  return packageJson.scripts;
 }
 
 function getPreSelectedScripts(context: vscode.ExtensionContext): string[] {
@@ -78,7 +76,7 @@ function getPreSelectedScripts(context: vscode.ExtensionContext): string[] {
 }
 
 async function selectScriptsFromPackageJson(
-  scripts: { [key: string]: string },
+  scripts: ScriptsType,
   preSelectedScripts: string[]
 ): Promise<string[] | undefined> {
   const scriptNames = Object.keys(scripts);
@@ -120,7 +118,7 @@ function saveScripts(
 
 function updateStatusBar(
   selectedScripts: string[],
-  allScripts: { [key: string]: string },
+  allScripts: ScriptsType,
   context: vscode.ExtensionContext
 ) {
   clearStatusBarItems(context);
