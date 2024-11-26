@@ -43,10 +43,8 @@ Contributions are welcome! If you encounter any bugs or have ideas for new featu
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-## Buy me a coffee
+## [Buy me a Coffee](https://buymeacoffee.com/staxar)
 
-<a href="https://buymeacoffee.com/staxar" target="_blank">
-    <img src="images/bmc_qr.png" alt="Buy me a coffee">
-</a>
+<img src="https://raw.githubusercontent.com/Staxar/packagefinder/master/images/bmc_qr.png" alt="buymeacoffee" width="250" height="250">
 
 **Enjoy!**
