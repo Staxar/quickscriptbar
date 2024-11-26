@@ -13,3 +13,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - Update README.md file
+
+## [0.0.3]
+
+### Changed
+
+- Update README.md file
