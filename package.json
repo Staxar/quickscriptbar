@@ -2,7 +2,7 @@
   "name": "quickscriptbar",
   "displayName": "Quick Script Bar",
   "description": "Instantly run your scripts from the VSCode status bar for faster development.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "icon": "images/icon.png",
   "pricing": "Free",
   "sponsor": {
