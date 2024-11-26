@@ -8,16 +8,14 @@
   "sponsor": {
     "url": "https://buymeacoffee.com/staxar"
   },
-  "publisher": "Marcin Domagała",
+  "publisher": "mdomagala",
   "engines": {
     "vscode": "^1.6.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "workspaceContains:package.json"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
