@@ -10,7 +10,7 @@ Quick Script Bar is a Visual Studio Code extension that allows you to quickly se
 
 > Status Bar Integration: Add selected scripts to the status bar for quick execution.
 
-![Features](images/quickScriptBar.gif)
+![Features](https://github.com/Staxar/quickscriptbar/blob/master/images/quickScriptBar.gif)
 
 ## Usage
 
