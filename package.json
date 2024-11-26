@@ -8,6 +8,10 @@
   "sponsor": {
     "url": "https://buymeacoffee.com/staxar"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Staxar/quickscriptbar"
+  },
   "publisher": "mdomagala",
   "engines": {
     "vscode": "^1.6.0"
@@ -47,7 +51,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.95.0",
+    "@types/vscode": "^1.6.0",
     "@types/mocha": "^10.0.8",
     "@types/node": "20.x",
     "@typescript-eslint/eslint-plugin": "^8.7.0",
