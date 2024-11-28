@@ -1,4 +1,4 @@
-# quickscriptbar README
+# Quick Script Bar extension for Visual Studio Code
 
 Quick Script Bar is a Visual Studio Code extension that allows you to quickly select and add scripts to your status bar for easy access and execution.
 
@@ -27,13 +27,6 @@ This extension contributes the following settings:
 - `quickscriptbar.configureScripts`: Select scripts from your package.json file and add them to status bar.
 - `quickscriptbar.runScript`: Run selected script in new terminal.
 
-## Release Notes
-
-### 0.0.1
-
-Initial release of Quick Script Bar
-
----
 
 ## Contributions
 
