@@ -5,7 +5,7 @@ import * as path from "path";
 type ScriptsType = { [key: string]: string };
 
 // Activation function
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   const configureScriptsCommand = vscode.commands.registerCommand(
     "quickscriptbar.configureScripts",
     () => configureScripts(context)
@@ -17,29 +17,34 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(configureScriptsCommand, runScriptCommand);
+  await initialScripts(context);
 }
 
 // Main function to configure scripts
+
+async function initialScripts(context: vscode.ExtensionContext) {
+  const workspaceFolder = getWorkspaceFolder();
+  const packageJsonScripts = await readPackageJson(workspaceFolder);
+  const preSelectedScripts = getPreSelectedScripts(context);
+
+  if (preSelectedScripts.length) {
+    updateStatusBar(preSelectedScripts, packageJsonScripts, context);
+  }
+  return { packageJsonScripts, preSelectedScripts };
+}
 async function configureScripts(context: vscode.ExtensionContext) {
   try {
-    const workspaceFolder = getWorkspaceFolder();
-    const packageJsonScripts = await readPackageJson(workspaceFolder);
-    const preSelectedScripts = getPreSelectedScripts(context);
-
-    if (preSelectedScripts.length) {
-      updateStatusBar(preSelectedScripts, packageJsonScripts, context);
-    }
-
+    const initials = await initialScripts(context);
     const selectedScripts = await selectScriptsFromPackageJson(
-      packageJsonScripts,
-      preSelectedScripts
+      initials.packageJsonScripts,
+      initials.preSelectedScripts
     );
     if (!selectedScripts) {
       return;
     }
 
     saveScripts(context, selectedScripts);
-    updateStatusBar(selectedScripts, packageJsonScripts, context);
+    updateStatusBar(selectedScripts, initials.packageJsonScripts, context);
   } catch (error) {
     console.error("Error in configureScripts:", error);
   }
@@ -121,7 +126,7 @@ function updateStatusBar(
   allScripts: ScriptsType,
   context: vscode.ExtensionContext
 ) {
-  clearStatusBarItems(context);
+  clearStatusBarItems(context, allScripts);
   selectedScripts.forEach((scriptName) => {
     const scriptCommand = allScripts[scriptName];
     const statusBarItem = createStatusBarItem(scriptName, scriptCommand);
@@ -129,9 +134,13 @@ function updateStatusBar(
   });
 }
 
-function clearStatusBarItems(context: vscode.ExtensionContext) {
+function clearStatusBarItems(
+  context: vscode.ExtensionContext,
+  allScripts: ScriptsType
+) {
   context.subscriptions.filter((sub: any) => {
-    if (sub.k) {
+    const allScriptArr = Object.entries(allScripts).map((item) => item[0]);
+    if (sub.k && allScriptArr.includes(sub.k.split(" ")[1])) {
       sub.dispose();
       return false;
     }
