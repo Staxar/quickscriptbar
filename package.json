@@ -2,7 +2,7 @@
   "name": "quickscriptbar",
   "displayName": "Quick Script Bar",
   "description": "Instantly run your scripts from the VSCode status bar for faster development.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "icon": "images/icon.png",
   "pricing": "Free",
   "sponsor": {
@@ -19,7 +19,10 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished",
+    "workspaceContains:package.json"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -27,11 +30,6 @@
         "command": "quickscriptbar.configureScripts",
         "title": "Configure Script in Status Bar",
         "category": "Quick Script Bar"
-      },
-      {
-        "command": "quickscriptbar.runScript",
-        "title": "Run Script",
-        "category": "Run Script"
       }
     ],
     "keybindings": [
