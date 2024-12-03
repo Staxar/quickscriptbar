@@ -21,3 +21,11 @@
 ### Changed
 
 - Update README.md file
+
+## [0.0.5]
+
+### Changed
+
+- Update README.md file
+- if pre-selected scripts exist add them to status bar when startup finished
+- improve clear function
