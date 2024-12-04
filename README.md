@@ -16,10 +16,11 @@ Quick Script Bar is a Visual Studio Code extension that allows you to quickly se
 
 1. Open a workspace in VSCode that contains package.json.
 2. Press `Ctrl+Shift+J` or run the command **Quick Script Bar: Configure Script in Status Bar** from the command palette (`Ctrl+Shift+P`).
-3. Select at least one script to save.
-4. Script appear on left side of status bar.
-5. Choose script and click to run in terminal.
-6. If pre-selected scripts exist 'ill be added to status bar when startup finished.
+3. Select a package manager you want to use.
+4. Select at least one script to save.
+5. Script appear on left side of status bar.
+6. Choose script and click to run in terminal.
+7. If pre-selected scripts exist 'ill be added to status bar when startup finished.
 
 ## Extension Settings
 
