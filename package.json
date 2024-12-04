@@ -30,6 +30,11 @@
         "command": "quickscriptbar.configureScripts",
         "title": "Configure Script in Status Bar",
         "category": "Quick Script Bar"
+      },
+      {
+        "command": "quickscriptbar.getPackageManager",
+        "title": "Configure Package Manager",
+        "category": "Quick Script Bar"
       }
     ],
     "keybindings": [
@@ -37,6 +42,11 @@
         "command": "quickscriptbar.configureScripts",
         "title": "Configure Script in Status Bar",
         "key": "ctrl+shift+j"
+      },
+      {
+        "command": "quickscriptbar.configureScripts",
+        "title": "Configure Package Manager",
+        "key": "ctrl+alt+j"
       }
     ]
   },

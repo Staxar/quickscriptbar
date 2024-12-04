@@ -13,28 +13,36 @@ export async function activate(context: vscode.ExtensionContext) {
 
   const runScriptCommand = vscode.commands.registerCommand(
     "quickscriptbar.runScript",
-    (script: string) => runScript(script)
+    (script: string, context: vscode.ExtensionContext) =>
+      runScript(script, context)
   );
 
-  context.subscriptions.push(configureScriptsCommand, runScriptCommand);
+  const getPackageManagerCommand = vscode.commands.registerCommand(
+    "quickscriptbar.getPackageManager",
+    () => getPackageManager(context)
+  );
+
+  context.subscriptions.push(
+    configureScriptsCommand,
+    runScriptCommand,
+    getPackageManagerCommand
+  );
   await initialScripts(context);
 }
 
 // Main function to configure scripts
 
-async function initialScripts(context: vscode.ExtensionContext) {
-  const workspaceFolder = getWorkspaceFolder();
-  const packageJsonScripts = await readPackageJson(workspaceFolder);
-  const preSelectedScripts = getPreSelectedScripts(context);
-
-  if (preSelectedScripts.length) {
-    updateStatusBar(preSelectedScripts, packageJsonScripts, context);
-  }
-  return { packageJsonScripts, preSelectedScripts };
-}
 async function configureScripts(context: vscode.ExtensionContext) {
+  const manager = context.workspaceState.get("qsb_saved_manager");
   try {
     const initials = await initialScripts(context);
+    if (!manager) {
+      const selectManager = await getPackageManager(context);
+      if (!selectManager) {
+        return;
+      }
+    }
+
     const selectedScripts = await selectScriptsFromPackageJson(
       initials.packageJsonScripts,
       initials.preSelectedScripts
@@ -51,6 +59,27 @@ async function configureScripts(context: vscode.ExtensionContext) {
 }
 
 // Helper functions
+
+async function getPackageManager(context: vscode.ExtensionContext) {
+  const managers = ["npm", "yarn"];
+  const quickPick = await vscode.window.showQuickPick(managers, {
+    placeHolder: "Select package manager",
+  });
+  context.workspaceState.update("qsb_saved_manager", quickPick);
+  return quickPick;
+}
+
+async function initialScripts(context: vscode.ExtensionContext) {
+  const workspaceFolder = getWorkspaceFolder();
+  const packageJsonScripts = await readPackageJson(workspaceFolder);
+  const preSelectedScripts = getPreSelectedScripts(context);
+
+  if (preSelectedScripts.length) {
+    updateStatusBar(preSelectedScripts, packageJsonScripts, context);
+  }
+  return { packageJsonScripts, preSelectedScripts };
+}
+
 function getWorkspaceFolder(): string {
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
   if (!workspaceFolder) {
@@ -129,7 +158,11 @@ function updateStatusBar(
   clearStatusBarItems(context, allScripts);
   selectedScripts.forEach((scriptName) => {
     const scriptCommand = allScripts[scriptName];
-    const statusBarItem = createStatusBarItem(scriptName, scriptCommand);
+    const statusBarItem = createStatusBarItem(
+      scriptName,
+      scriptCommand,
+      context
+    );
     context.subscriptions.push(statusBarItem);
   });
 }
@@ -150,7 +183,8 @@ function clearStatusBarItems(
 
 function createStatusBarItem(
   script: string,
-  scriptCommand: string
+  scriptCommand: string,
+  context: vscode.ExtensionContext
 ): vscode.StatusBarItem {
   const statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
@@ -160,17 +194,21 @@ function createStatusBarItem(
   statusBarItem.tooltip = scriptCommand;
   statusBarItem.command = {
     command: "quickscriptbar.runScript",
-    arguments: [script],
+    arguments: [script, context],
     title: `Run ${script}`,
   };
   statusBarItem.show();
   return statusBarItem;
 }
 
-function runScript(script: string) {
+function runScript(script: string, context: vscode.ExtensionContext) {
+  const manager = context.workspaceState.get("qsb_saved_manager");
+  if (!manager) {
+    getPackageManager(context);
+  }
   const terminal = vscode.window.createTerminal({
     name: `Run Script: ${script}`,
   });
-  terminal.sendText(`npm run ${script}`);
+  terminal.sendText(`${manager} run ${script}`);
   terminal.show();
 }
