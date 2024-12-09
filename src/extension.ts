@@ -206,9 +206,16 @@ function runScript(script: string, context: vscode.ExtensionContext) {
   if (!manager) {
     getPackageManager(context);
   }
-  const terminal = vscode.window.createTerminal({
-    name: `Run Script: ${script}`,
-  });
+
+  const terminalName = `Run Script: ${script}`;
+  let terminal = vscode.window.terminals.find((t) => t.name === terminalName);
+
+  if (!terminal) {
+    terminal = vscode.window.createTerminal({
+      name: terminalName,
+    });
+  }
+
   terminal.sendText(`${manager} run ${script}`);
   terminal.show();
 }
