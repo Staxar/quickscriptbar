@@ -42,3 +42,9 @@
 ### Fix
 
 - If terminal with script name already exist and match runned script use this one if not create new one.
+
+## [0.0.7]
+
+### Add
+
+- Add shortcuts for macOS.

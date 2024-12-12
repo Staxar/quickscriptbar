@@ -2,7 +2,7 @@
   "name": "quickscriptbar",
   "displayName": "Quick Script Bar",
   "description": "Instantly run your scripts from the VSCode status bar for faster development.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "icon": "images/icon.png",
   "pricing": "Free",
   "sponsor": {
@@ -40,13 +40,9 @@
     "keybindings": [
       {
         "command": "quickscriptbar.configureScripts",
-        "title": "Configure Script in Status Bar",
-        "key": "ctrl+shift+j"
-      },
-      {
-        "command": "quickscriptbar.configureScripts",
         "title": "Configure Package Manager",
-        "key": "ctrl+alt+j"
+        "key": "ctrl+alt+j",
+        "mac": "cmd+options+j"
       }
     ]
   },
