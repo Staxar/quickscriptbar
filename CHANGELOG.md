@@ -48,3 +48,9 @@
 ### Add
 
 - Add shortcuts for macOS.
+
+## [0.0.9]
+
+### Add
+
+- Add pnpm package manager
