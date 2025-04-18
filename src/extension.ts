@@ -61,12 +61,28 @@ async function configureScripts(context: vscode.ExtensionContext) {
 // Helper functions
 
 async function getPackageManager(context: vscode.ExtensionContext) {
-  const managers = ["npm", "yarn"];
-  const quickPick = await vscode.window.showQuickPick(managers, {
+  // Select package manager
+  const managers = ["npm", "yarn", "pnpm"];
+  const selectedManager = await vscode.window.showQuickPick(managers, {
     placeHolder: "Select package manager",
   });
-  context.workspaceState.update("qsb_saved_manager", quickPick);
-  return quickPick;
+
+  if (!selectedManager) {
+    return;
+  }
+
+  // Select whether to include "run" command
+  const runOptions = ["Include 'run' command", "Don't include 'run' command"];
+  const runOption = await vscode.window.showQuickPick(runOptions, {
+    placeHolder: "Should the command include 'run'?",
+  });
+
+  const includeRun = runOption === runOptions[0];
+
+  context.workspaceState.update("qsb_saved_manager", selectedManager);
+  context.workspaceState.update("qsb_include_run", includeRun);
+
+  return selectedManager;
 }
 
 async function initialScripts(context: vscode.ExtensionContext) {
@@ -205,7 +221,10 @@ function runScript(script: string, context: vscode.ExtensionContext) {
   const manager = context.workspaceState.get("qsb_saved_manager");
   if (!manager) {
     getPackageManager(context);
+    return;
   }
+
+  const includeRun = context.workspaceState.get("qsb_include_run", true); // Default to true for backward compatibility
 
   const terminalName = `Run Script: ${script}`;
   let terminal = vscode.window.terminals.find((t) => t.name === terminalName);
@@ -216,6 +235,9 @@ function runScript(script: string, context: vscode.ExtensionContext) {
     });
   }
 
-  terminal.sendText(`${manager} run ${script}`);
+  const command = includeRun
+    ? `${manager} run ${script}`
+    : `${manager} ${script}`;
+  terminal.sendText(command);
   terminal.show();
 }
